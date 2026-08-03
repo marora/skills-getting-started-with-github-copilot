@@ -57,7 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 `/activities/${encodeURIComponent(name)}/unregister?email=${encodeURIComponent(email)}`,
                 { method: "DELETE" }
               );
-              const result = await response.json();
+
+              let result = {};
+              try {
+                result = await response.json();
+              } catch {
+                result = { detail: await response.text() };
+              }
 
               if (!response.ok) {
                 throw new Error(result.detail || "Failed to unregister participant");
